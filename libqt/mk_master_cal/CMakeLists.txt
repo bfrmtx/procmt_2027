@@ -1,0 +1,71 @@
+project(mk_master_cal VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+include(${CMAKE_SOURCE_DIR}/cmake/rpath.cmake)
+
+include_directories(
+${CMAKE_INSTALL_PREFIX}/include
+${CMAKE_SOURCE_DIR}/include
+${CMAKE_SOURCE_DIR}/base/msg_logger
+${CMAKE_SOURCE_DIR}/base/prc_com
+${Boost_INCLUDE_DIRS}
+${CMAKE_SOURCE_DIR}/qcustomplot
+${CMAKE_SOURCE_DIR}/libqt/plotlib
+${CMAKE_SOURCE_DIR}/libqt/gui_items
+${CMAKE_SOURCE_DIR}/libxml/measdocxml
+${CMAKE_SOURCE_DIR}/libxml/calibration
+${CMAKE_SOURCE_DIR}/libxml/calstat
+${CMAKE_SOURCE_DIR}/boost_student
+${CMAKE_SOURCE_DIR}/libvector/math_vector
+${CMAKE_SOURCE_DIR}/libqt/mk_master_callib
+${CMAKE_SOURCE_DIR}/libqt/tinyxml2
+${CMAKE_SOURCE_DIR}/libqt/tinyxmlwriter
+${CMAKE_SOURCE_DIR}/libqt/db_sensor_query
+${CMAKE_SOURCE_DIR}/libqt/sql_base_tools
+${CMAKE_SOURCE_DIR}/libqt/sql_vector
+${CMAKE_SOURCE_DIR}/libqt/xmlcallib
+${CMAKE_SOURCE_DIR}/libqt/prc_com_table
+)
+
+set(SOURCES
+        main.cpp
+        mk_master_cal.cpp
+        mk_master_cal.h
+        mk_master_cal.ui
+)
+
+# for executables
+include(${CMAKE_SOURCE_DIR}/cmake/qt_gui_1.cmake)
+# for qcustomplot
+include(${CMAKE_SOURCE_DIR}/cmake/qcustomplot_use.cmake)
+
+# that is where the self compiled taglib will be
+# so that must be compiled first
+include_directories(${CMAKE_INSTALL_PREFIX}/include ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(${PROJECT_NAME}
+PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+PRIVATE Qt${QT_VERSION_MAJOR}::Sql
+PRIVATE Qt${QT_VERSION_MAJOR}::PrintSupport
+PRIVATE qcustomplot
+PRIVATE plotlib
+PRIVATE gui_items
+PRIVATE boost_student
+PRIVATE math_vector
+PRIVATE tinyxml2
+PRIVATE tinyxmlwriter
+PRIVATE measdocxml
+PRIVATE calibration
+PRIVATE db_sensor_query
+PRIVATE sql_base_tools
+PRIVATE sql_vector
+PRIVATE xmlcallib
+PRIVATE prc_com_table
+)
+
+# for executables
+include(${CMAKE_SOURCE_DIR}/cmake/qt_gui_2.cmake)

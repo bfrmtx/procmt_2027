@@ -1,0 +1,27 @@
+#!/bin/zsh
+clear
+PROJ='procmt_2027'
+INTSTALLDIR='/usr/local/procmt'
+# debug here
+# put your github download here:
+SRC_DIR='./'
+# in my case /home/bfr/devel/github_procmt_2027/procmt_2027 is where the CmakeLists.txt is
+# this directory will be created by cmake respectivly mkdir -p
+BUILD_DIR=$HOME'/build/'$PROJ/'build'
+# in my case /home/bfr/build/procmt_2027/build
+#
+#
+mkdir -p $BUILD_DIR
+cmake -S $SRC_DIR -B $BUILD_DIR -DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_INSTALL_PREFIX=$INTSTALLDIR -DCMAKE_BUILD_TYPE=DEBUG
+# make a single thread in case
+cmake --build $BUILD_DIR --parallel 16
+# install needs write access to /usr/local/procmt - im my case I simply "sudo mkdir /usr/local/procmt"
+# libraries and headers will go below; so you can alway "uninstall" by removing the /usr/local/procmt directory
+cmake --install $BUILD_DIR
+# COMMENT this line out - the "old" ediplotter can't be build with Qt6; this version will call "ediplotter_new" in case "ediplotter" is missing
+# if not macOS then copy old ediplotter ediplotter
+if [ -f $HOME'/bin/proc_mt_s/ediplotter' ]; then
+  echo "try to copy ediplotter"
+  cp $HOME'/bin/proc_mt_s/ediplotter' $INTSTALLDIR/bin
+fi
+echo "done"

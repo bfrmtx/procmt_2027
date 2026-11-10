@@ -1,0 +1,45 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "procmt",
+            "displayName": "procmt (Clang Debug)",
+            "description": "Using compilers: C = /usr/bin/clang, CXX = /usr/bin/clang++",
+            "generator": "Ninja",
+            "binaryDir": "$env{HOME}/build/procmt_2027/build",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "/usr/local/procmt",
+                "CMAKE_C_COMPILER": "/usr/bin/clang",
+                "CMAKE_CXX_COMPILER": "/usr/bin/clang++",
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows",
+            "displayName": "windows",
+            "description": "Using compilers for Visual Studio 17 2022 (x64 architecture)",
+            "generator": "Visual Studio 17 2022",
+            "toolset": "host=x64",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "procmt",
+            "configurePreset": "procmt",
+            "jobs": 0
+        },
+        {
+            "name": "windows-debug",
+            "displayName": "windows - Debug",
+            "configurePreset": "windows",
+            "configuration": "Debug"
+        }
+    ]
+}

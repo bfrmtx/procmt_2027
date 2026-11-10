@@ -1,0 +1,26 @@
+project(tinyxml2 VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+include(${CMAKE_SOURCE_DIR}/cmake/rpath.cmake)
+
+#top tree dir is CMAKE_SOURCE_DIR
+include_directories(${CMAKE_INSTALL_PREFIX}/include ${CMAKE_SOURCE_DIR}/include)
+
+set(SOURCES
+  tinyxml2.cpp
+)
+
+set(HEADERS_INSTALL
+  tinyxml2.h
+)
+
+add_library(${PROJECT_NAME}   ${SOURCES} ${HEADERS_INSTALL} )
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_definitions(${PROJECT_NAME} PRIVATE TINYXML2_LIBRARY)
+
+# for libraries
+include(${CMAKE_SOURCE_DIR}/cmake/lib.cmake)
