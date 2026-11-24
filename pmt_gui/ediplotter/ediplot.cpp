@@ -1,5 +1,9 @@
 #include "ediplot.h"
 
+#include <algorithm>
+#include <numeric>
+#include <vector>
+
 QString const layer_selection = "layer_selection";
 double const coords_min = -1e20;
 double const coords_max = 1e20;
@@ -29,15 +33,20 @@ void EdiPlot::add_edi_plot(const QString &name, mt_data_res<std::complex<double>
   new_graph->setScatterStyle(QCPScatterStyle::ssSquare);
 
   if (data.freqs.size() == data.d[elem].size()) {
+    // QCPGraph sorts by frequency; error bars must follow the same order.
+    std::vector<size_t> order(data.freqs.size());
+    std::iota(order.begin(), order.end(), 0);
+    std::stable_sort(order.begin(), order.end(),
+                     [&](size_t a, size_t b) { return data.freqs[a] < data.freqs[b]; });
     QVector<double> errors;
-    for (size_t index = 0; index < data.freqs.size(); ++index) {
+    for (const auto index : order) {
 
       auto const &f = data.freqs[index];
       auto y = type == EdiPlotType::phi ? data.phi_deg(elem, index, this->phase_is_mapped) : data.rho(elem, index);
       auto err = type == EdiPlotType::phi ? data.phi_deg_err(elem, index, true) : data.rho_err(elem, index, true);
       new_graph->addData(f, y);
 
-      errors.push_front(err); // which size? up and down?
+      errors.push_back(err);
     }
     error_bars->addData(errors);
     error_bars->setPen(pen);

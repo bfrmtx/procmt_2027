@@ -1,4 +1,9 @@
 # Windows
+
+The build and deployment scripts load shared defaults from `zwck_config.bat`.
+Set `QTDIR` or `PROCMT_BASE` before running them to override the default Qt
+installation or the `%HOMEDRIVE%%HOMEPATH%\mtxsw\procmt` build and deployment root.
+
 Path environment:
 ```{text}
 C:\Users\bfr\AppData\Local\Programs\Microsoft VS Code\bin

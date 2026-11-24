@@ -1,15 +1,15 @@
 @echo off
 setlocal EnableExtensions
 
-set "VSBT=%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools"
+call "%~dp0zwcl_config.bat"
+if errorlevel 1 exit /b 1
+
 call "%VSBT%\VC\Auxiliary\Build\vcvars64.bat"
 if errorlevel 1 exit /b 1
 
-set "base=%HOMEDRIVE%%HOMEPATH%\mtxsw\procmt"
-set "installdir=%base%\install\procmt"
-set "procmt_zip_root=%base%\procmt_zip_dir"
+set "installdir=%PROCMT_BASE%\install\procmt"
+set "procmt_zip_root=%PROCMT_BASE%\procmt_zip_dir"
 set "procmt_zip_dir=%procmt_zip_root%\procmt"
-if not defined QTDIR set "QTDIR=C:\Qt\6.12.0\msvc2022_64"
 set "windeployqt=%QTDIR%\bin\windeployqt.exe"
 if not exist "%windeployqt%" set "windeployqt=%QTDIR%\bin\windeployqt6.exe"
 if not exist "%windeployqt%" (
@@ -58,7 +58,7 @@ for %%d in (Qt6OpenGL.dll Qt6OpenGLWidgets.dll Qt6PrintSupport.dll Qt6Xml.dll Qt
 )
 echo Deployment completed: "%procmt_zip_dir%"
 echo The directory can be packaged as-is; bin contains the launchers.
-set "zipfile=%base%\procmt.zip"
+set "zipfile=%PROCMT_BASE%\procmt.zip"
 set "deploydir=%procmt_zip_dir%"
 set "zipper=C:\Program Files\7-Zip\7z.exe"
 if not exist "%zipper%" (

@@ -808,7 +808,7 @@ struct mt_data_res {
   }
 
   /*!
-   * \brief rho_err returns error of rho; the error bar is divided by two in display for error greater than value
+   * \brief rho_err returns propagated resistivity error in Ohm-m, limited to half rho if the lower endpoint is nonpositive
    * \param elem
    * \param bsqrt check for error vs variance
    * \return
@@ -819,18 +819,17 @@ struct mt_data_res {
 
     double xerr;
     if (bsqrt) {
-      // xerr = ((abs(this->d[elem][idx]) * std::sqrt(this->err[elem][idx])) / this->freqs[idx]);
       xerr = std::sqrt(this->err[elem][idx]);
 
     } else {
-      // xerr = ((abs(this->d[elem][idx]) * this->err[elem][idx]) / this->freqs[idx]);
       xerr = this->err[elem][idx];
     }
+    xerr *= (mue0 / (M_PI * this->freqs[idx])) * abs(this->d[elem][idx]) * 1000000.0;
 
     double xrho = this->rho(elem, idx);
     // avoid plot err in log scale
-    if (xerr > xrho)
-      xerr *= 0.25;
+    if (xerr >= xrho)
+      xerr = xrho / 2.0;
     return xerr;
   }
 
